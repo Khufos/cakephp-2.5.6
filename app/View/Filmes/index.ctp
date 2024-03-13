@@ -9,7 +9,10 @@
 
 $detalhes = array();
 foreach ($filmes as $filme) {
-    $detalhes[] = array($filme['Filme']['nome'], $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma']);
+    $view = $this->Html->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id']);
+    $editLink = $this->Html->link('Alterar', array('controller' => 'filmes', 'action' => 'edit', $filme['Filme']['id']));
+    $detalhes[] = array($view , $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $editLink);
+    
 }
 
 echo $this->Html->tag('h1', 'Filmes');
@@ -17,11 +20,14 @@ echo $this->Html->tag('h1', 'Filmes');
 
 $titulos = array('Nome', 'Ano', 'Duração', 'Idioma');
 $header = $this->Html->tableHeaders($titulos);
+$novoBotao = $this->Html->link('Novo', '/filmes/add');
 
 // $detalhe = array(
 //     array('Avengers','2019','5:00','Ingles')
 // );
+
 $body = $this->Html->tableCells($detalhes);
+echo $novoBotao;
 echo $this->Html->tag('table', $header . $body);
 
 
