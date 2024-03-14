@@ -11,7 +11,8 @@ $detalhes = array();
 foreach ($filmes as $filme) {
     $view = $this->Html->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id']);
     $editLink = $this->Html->link('Alterar', array('controller' => 'filmes', 'action' => 'edit', $filme['Filme']['id']));
-    $detalhes[] = array($view , $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $editLink);
+    $deleteLink = $this->Html->link('Excluir', '/filmes/delete/' . $filme['Filme']['id']);
+    $detalhes[] = array($view , $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $editLink.' '.$deleteLink);
     
 }
 
