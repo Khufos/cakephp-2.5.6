@@ -2,24 +2,40 @@
 
 class FilmesController extends AppController
 {
+    
+    
+    public $layout = 'bootstrap';
+    public $paginate = array(
+       
+        'fields' => array('Filme.nome','Filme.ano','Genero.nome','Filme.duracao','Filme.idioma'),
+        'conditions' =>array(),
+        'limit'=>10,
+        'order' => array('Filme.nome' => 'asc')
+    );
+
+    
     public function index()
-    {
+    {   
+        
+        // $fields = array('Filme.nome', 'Filme.ano','Genero.nome');
+        // $order = array('Filme.nome' => 'desc');
+        // $filmes = $this->Filme->find('all', compact('first', 'order'));
 
-        // $filmes = array(
-
-        //     array('Filme' => array('nome' => 'Avengers', 'ano' => '2019', 'duracao' => '5.0', 'idioma' => 'Ingles')),
-        //     array('Filme' => array('nome' => 'Pantera ', 'ano' => '2020', 'duracao' => '10.0', 'idioma' => 'Português')),
-        //     array('Filme' => array('nome' => 'Sapoto', 'ano' => '2045', 'duracao' => '2.0', 'idioma' => 'Italiano')),
-        // );
-        $fields = array('Filme.nome', 'Filme.ano');
-        $order = array('Filme.nome' => 'desc');
-        $filmes = $this->Filme->find('all', compact('first', 'order'));
-
+        if($this->request->is('post') && !empty($this->request->data['Filme']['nome'])){
+        
+            $this->paginate['conditions']['Filme.nome'] = $this->request->data['Filme']['nome'];
+        }
+        $filmes = $this->paginate();
         $this->set(compact('filmes'));
+
+
     }
 
     public function add()
+    
     {
+
+     
         if (!empty($this->request->data)) {
             $this->Filme->create();
             if ($this->Filme->save($this->request->data)) {
@@ -30,6 +46,9 @@ class FilmesController extends AppController
                 $this->redirect(array('action' => 'index'));
             }
         }
+        $fields = array('Genero.id','Genero.nome');
+        $generos = $this->Filme->Genero->find('list', compact('fields'));
+        $this->set('generos', $generos);
     }
 
 
@@ -45,11 +64,13 @@ class FilmesController extends AppController
                 $this->redirect(array('action' => 'index'));
             }
         }else{
-            $fields = array('Filme.id','Filme.nome','Filme.duracao','Filme.idioma','Filme.ano');
+            $fields = array('Filme.id','Filme.nome','Filme.duracao','Filme.idioma','Filme.ano','Filme.genero_id');
             $conditions = array('Filme.id'=>$id);
             $this->request->data =$this->Filme->find('first', compact('fields','conditions'));
         }
-
+        $fields = array('Genero.id','Genero.nome');
+        $generos = $this->Filme->Genero->find('list', compact('fields'));
+        $this->set('generos', $generos);
 
     }
 
