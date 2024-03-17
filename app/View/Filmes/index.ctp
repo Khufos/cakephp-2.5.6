@@ -1,52 +1,58 @@
 <?php
+// Assumindo que $filmes é um array preenchido anteriormente com dados dos filmes.
 
-// $filmes = array(
-//     array('Filme' => array('nome' => 'Avengers', 'ano' => '2019', 'duracao' => '5.0', 'idioma' => 'Ingles')),
-//     array('Filme' => array('nome' => 'Pantera ', 'ano' => '2020', 'duracao' => '10.0', 'idioma' => 'Português')),
-//     array('Filme' => array('nome' => 'Sapoto', 'ano' => '2045', 'duracao' => '2.0', 'idioma' => 'Italiano')),
-// );
+// Criando o botão "Novo" apenas uma vez, corrigindo o caminho e a classe.
+$novoButton = $this->Html->link('Novo', '/filmes/add', array('class' => 'btn btn-success'));
 
-$filtro = $this->Form->create('Filme',array('class'=>'form-inline'));
-$filtro .= $this->Form->input('Filme.nome',array(
-    'required'=>false,
-    'label' => array('text'=>'Nome', 'class'=>'sr-only')
+// Construindo o formulário de filtro sem exibi-lo diretamente.
+$filtro = $this->Form->create('Filme', array('class' => 'form-inline'));
+$filtro .= $this->Form->control('Filme.nome', array(
+    'required' => false,
+    'label' => array('text' => 'Nome', 'class' => 'sr-only'),
+    'class' => 'form-control mb-2 mr-sm-2',
+    'div' => false,
+    'placeholder' => 'Nome'
 ));
-$filtro .= $this->Form->end('Filtrar');
+$filtro .= $this->Form->button('Filtrar', array('type' => 'submit', 'class' => 'btn btn-primary mb-2'));
+$filtro .= $this->Form->end();
 
+// Combinando o filtro e o botão novo numa barra de ferramentas.
+$filtroBar = $this->Html->div('row',
+    $this->Html->div('col-md-6', $filtro) .
+    $this->Html->div('col-md-6', $novoButton)
+);
+
+// Preparando detalhes dos filmes.
 $detalhes = array();
 foreach ($filmes as $filme) {
-    $view = $this->Html->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id']);
+    $viewLink = $this->Html->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id']);
     $editLink = $this->Html->link('Alterar', array('controller' => 'filmes', 'action' => 'edit', $filme['Filme']['id']));
-    $deleteLink = $this->Html->link('Excluir', '/filmes/delete/' . $filme['Filme']['id']);
-    $detalhes[] = array($view , $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $filme['Genero']['nome'], $editLink.' '.$deleteLink);
+    $deleteLink = $this->Html->link('Excluir', '/filmes/delete/' . $filme['Filme']['id'], array('confirm' => 'Tem certeza?'));
+    $detalhes[] = array($viewLink, $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $filme['Genero']['nome'], $editLink . ' ' . $deleteLink);
 }
 
-echo $this->Html->tag('h1', 'Filmes');
-echo $filtro;
-$titulos = array('Nome', 'Ano', 'Duração', 'Idioma', 'Genero do Filme');
-$header = $this->Html->tag('thead',$this->Html->tableHeaders($titulos));
-$novoBotao = $this->Html->link('Novo', '/filmes/add');
+// Cabeçalhos da tabela.
+$titulos = array('Nome', 'Ano', 'Duração', 'Idioma', 'Gênero do Filme');
+$header = $this->Html->tag('thead', $this->Html->tableHeaders($titulos));
 
-// Adicione cada link de paginação ao array $paginate
-$paginate[] = $this->Paginator->first();
-$paginate[] = $this->Paginator->prev();
-$paginate[] = $this->Paginator->numbers();
-$paginate[] = $this->Paginator->next();
-$paginate[] = $this->Paginator->last();
-$paginate[] = $this->Html->link('5 por página', array('controller' => 'filmes', 'action' => 'index', 'limit' => 5));
-$paginate[] = $this->Html->link('10 por página', array('controller' => 'filmes', 'action' => 'index', 'limit' => 10));
-$paginate[] = $this->Paginator->counter();
-
-// Concatene todos os links de paginação em uma string usando a função implode()
-$paginate = implode('', $paginate);
-
-// Encapsule a string $paginate em uma tag <p> utilizando a função $this->Html->para()
+// Paginação (sem duplicar links personalizados de limitação).
+$paginateLinks = array(
+    $this->Paginator->first(),
+    $this->Paginator->prev(),
+    $this->Paginator->numbers(),
+    $this->Paginator->next(),
+    $this->Paginator->last(),
+    $this->Paginator->counter(['format' => 'Página {:page} de {:pages}, mostrando {:current} de {:count} filmes no total'])
+);
+$paginate = implode('', $paginateLinks);
 $paginate = $this->Html->para('', $paginate);
 
+// Montando o corpo da tabela.
 $body = $this->Html->tableCells($detalhes);
-echo $novoBotao;
-echo $this->Html->tag('table', $header . $body,array('class'=>'table'));
+
+// Exibindo tudo.
+echo $this->Html->tag('h1', 'Filmes');
+echo $filtroBar; // Exibe o filtro e o botão "Novo" juntos.
+echo $this->Html->tag('table', $header . $body, array('class' => 'table'));
 echo $paginate;
-
-
 ?>
