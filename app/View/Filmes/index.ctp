@@ -13,7 +13,7 @@ $filtro .= $this->Form->control('Filme.nome', array(
     'div' => false,
     'placeholder' => 'Nome'
 ));
-$filtro .= $this->Form->button('Filtrar', array('type' => 'submit', 'class' => 'btn btn-primary mb-2'));
+$filtro .= $this->Js->submit('Filtrar', array('type' => 'submit', 'class' => 'btn btn-primary mb-2','update'=> '#content'));
 $filtro .= $this->Form->end();
 
 // Combinando o filtro e o botão novo numa barra de ferramentas.
@@ -37,6 +37,7 @@ $titulos = array('Nome', 'Ano', 'Duração', 'Idioma', 'Gênero do Filme');
 $header = $this->Html->tag('thead', $this->Html->tableHeaders($titulos));
 
 // Paginação (sem duplicar links personalizados de limitação).
+$this->Paginator->options(array('update'=>'#content'));
 $paginateLinks = array(
     $this->Paginator->first('Primeiro', array('class' => 'page-link')),
     $this->Paginator->prev('Anterior', array('class' => 'page-link')),
@@ -60,4 +61,7 @@ echo $this->Html->tag('h1', 'Filmes');
 echo $filtroBar; // Exibe o filtro e o botão "Novo" juntos.
 echo $this->Html->tag('table', $header . $body, array('class' => 'table'));
 echo $paginateBar;
+if($this->request->is('ajax')){
+    echo $this->Js->writeBuffer();
+}
 ?>

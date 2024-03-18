@@ -27,8 +27,8 @@ echo $this->Form->input('genero_id', array(
 ));
 
 // Botão de envio
-echo $this->Form->submit('Gravar');
+echo $this->Form->submit('Gravar',array('class'=>'btn btn-secondary ml-3','update'=>'#content'));
 
 // Fechar o formulário
-echo $this->Form->end();
+echo $this->Form->end();1
 ?>
