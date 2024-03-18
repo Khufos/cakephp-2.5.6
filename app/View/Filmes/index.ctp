@@ -2,7 +2,7 @@
 // Assumindo que $filmes é um array preenchido anteriormente com dados dos filmes.
 
 // Criando o botão "Novo" apenas uma vez, corrigindo o caminho e a classe.
-$novoButton = $this->Html->link('Novo', '/filmes/add', array('class' => 'btn btn-success'));
+$novoButton = $this->Js->link('Novo', '/filmes/add', array('class' => 'btn btn-success','update'=>'#content'));
 
 // Construindo o formulário de filtro sem exibi-lo diretamente.
 $filtro = $this->Form->create('Filme', array('class' => 'form-inline'));
@@ -17,7 +17,8 @@ $filtro .= $this->Form->button('Filtrar', array('type' => 'submit', 'class' => '
 $filtro .= $this->Form->end();
 
 // Combinando o filtro e o botão novo numa barra de ferramentas.
-$filtroBar = $this->Html->div('row',
+$filtroBar = $this->Html->div(
+    'row',
     $this->Html->div('col-md-6', $filtro) .
     $this->Html->div('col-md-6', $novoButton)
 );
@@ -25,9 +26,9 @@ $filtroBar = $this->Html->div('row',
 // Preparando detalhes dos filmes.
 $detalhes = array();
 foreach ($filmes as $filme) {
-    $viewLink = $this->Html->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id']);
-    $editLink = $this->Html->link('Alterar', array('controller' => 'filmes', 'action' => 'edit', $filme['Filme']['id']));
-    $deleteLink = $this->Html->link('Excluir', '/filmes/delete/' . $filme['Filme']['id'], array('confirm' => 'Tem certeza?'));
+    $viewLink = $this->Js->link($filme['Filme']['nome'], '/filmes/view/' . $filme['Filme']['id'],array('update'=>'#content'));
+    $editLink = $this->Js->link('Alterar', array('controller' => 'filmes', 'action' => 'edit', $filme['Filme']['id']), array('update'=>'#content'));
+    $deleteLink = $this->Js->link('Excluir', '/filmes/delete/' . $filme['Filme']['id'], array('confirm' => 'Tem certeza?'),array('update'=>'#content'));
     $detalhes[] = array($viewLink, $filme['Filme']['ano'], $filme['Filme']['duracao'], $filme['Filme']['idioma'], $filme['Genero']['nome'], $editLink . ' ' . $deleteLink);
 }
 
@@ -37,16 +38,20 @@ $header = $this->Html->tag('thead', $this->Html->tableHeaders($titulos));
 
 // Paginação (sem duplicar links personalizados de limitação).
 $paginateLinks = array(
-    $this->Paginator->first(),
-    $this->Paginator->prev(),
-    $this->Paginator->numbers(),
-    $this->Paginator->next(),
-    $this->Paginator->last(),
-    $this->Paginator->counter(['format' => 'Página {:page} de {:pages}, mostrando {:current} de {:count} filmes no total'])
+    $this->Paginator->first('Primeiro', array('class' => 'page-link')),
+    $this->Paginator->prev('Anterior', array('class' => 'page-link')),
+    $this->Paginator->next('Próximo', array('class' => 'page-link')),
+    //$this->Paginator->numbers('Numeros',array('class'=>'page-link')),
+    $this->Paginator->last('Última', array('class' => 'page-link')),
 );
-$paginate = implode('', $paginateLinks);
-$paginate = $this->Html->para('', $paginate);
-
+$paginate = $this->Html->nestedList($paginateLinks, array('class' => 'pagination'), array('class' => 'page-item'));
+$paginate = $this->Html->para('nav', $paginate);
+$paginateCounter = $this->Paginator->counter(['format' => 'Página {:page} de {:pages}, mostrando {:current} de {:count} filmes no total']);
+$paginateBar = $this->Html->div(
+    'row',
+    $this->Html->div('col-md-6', $paginate) .
+        $this->Html->div('col-mb-6', $paginateCounter)
+);
 // Montando o corpo da tabela.
 $body = $this->Html->tableCells($detalhes);
 
@@ -54,5 +59,5 @@ $body = $this->Html->tableCells($detalhes);
 echo $this->Html->tag('h1', 'Filmes');
 echo $filtroBar; // Exibe o filtro e o botão "Novo" juntos.
 echo $this->Html->tag('table', $header . $body, array('class' => 'table'));
-echo $paginate;
+echo $paginateBar;
 ?>

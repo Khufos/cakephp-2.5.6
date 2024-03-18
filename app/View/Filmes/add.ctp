@@ -21,6 +21,7 @@ echo $this->Form->input('ano', array('type' => 'text', 'maxlength' => 4));
 
 // Campo de seleção de gênero
 echo $this->Form->input('genero_id', array(
+    
     'type' => 'select',
     'options' => $generos // Certifique-se de que $generos contém as opções necessárias
 ));

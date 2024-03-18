@@ -5,6 +5,9 @@ class FilmesController extends AppController
     
     
     public $layout = 'bootstrap';
+
+    public $helpers = array('Js' => array('Jquery'));
+    public $components = array('RequestHandler');
     public $paginate = array(
        
         'fields' => array('Filme.nome','Filme.ano','Genero.nome','Filme.duracao','Filme.idioma'),
@@ -46,6 +49,7 @@ class FilmesController extends AppController
                 $this->redirect(array('action' => 'index'));
             }
         }
+        
         $fields = array('Genero.id','Genero.nome');
         $generos = $this->Filme->Genero->find('list', compact('fields'));
         $this->set('generos', $generos);
@@ -89,6 +93,11 @@ class FilmesController extends AppController
         $this->Filme->delete($id);
         $this->redirect('/filmes');
 
+
+	}
+
+
+    public function imprimir() {
 
 	}
 }

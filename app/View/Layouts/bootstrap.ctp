@@ -77,7 +77,7 @@
         </div>
     </nav>
 
-    <main role="main" class="container">
+    <main role="main" class="container" id="content">
 
         <?php
         echo $this->Session->flash();
@@ -88,14 +88,25 @@
     </main>
     <?php
     echo $this->Html->script('jquery-3.7.1.min.js');
-    echo $this->Html->script('bootstrap.bundle.min.js')
+    echo $this->Html->script('bootstrap.bundle.min.js');
+    echo $this->Js->writeBuffer();
 
     ?>
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')
-    </script>
-    <script src="/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script> -->
+  <!-- <script>
+    $(document).ready(function() {
+        $('#link-131').on('click', function(event) {
+            event.preventDefault();
+            console.log('ok');
+            $.ajax({
+                type: 'get',
+                url: '/cake2.0/cakephp-2.5.6/filmes/view/131',
+                success: function(content) {
+                    $('#content').html(content);
+                }
+            });
+        });
+    });
+</script> -->
 </body>
 
 </html>

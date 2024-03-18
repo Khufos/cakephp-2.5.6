@@ -9,6 +9,7 @@ echo $this->Form->input('duracao');
 echo $this->Form->input('ano');
 echo $this->Form->input('genero_id', array(
     'type' => 'select',
+    
     'options' => $generos // Certifique-se de que $generos contém as opções necessárias
 ));
 
