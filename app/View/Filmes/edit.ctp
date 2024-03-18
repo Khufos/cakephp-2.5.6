@@ -13,7 +13,7 @@ echo $this->Form->input('genero_id', array(
     'options' => $generos // Certifique-se de que $generos contém as opções necessárias
 ));
 
-echo $this->Form->submit('Gravar');
+echo $this->Form->submit('Gravar',array('class'=>'btn btn-secondary ml-3','update'=>'#content'));
 echo $this->Form->end();
 
 ?>

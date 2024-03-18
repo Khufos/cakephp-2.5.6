@@ -28,7 +28,7 @@ foreach($this->request->data['Ator'] as $atore){
 $view .= $this->Html->para('', $atores);
 // Adicionando todas as críticas em um parágrafo após o loop
 
-$voltarLink = $this->Html->link('Voltar', '/filmes');
+$voltarLink = $this->Html->link('Voltar', '/filmes',array('class'=>'btn btn-sencondary ml-3','update'=> '#content'));
 
 echo $view;
 echo $voltarLink;
