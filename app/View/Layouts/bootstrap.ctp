@@ -58,7 +58,7 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <?php echo $this->Html->link('Atores', '/atores', array('class' => 'nav-link')) ?>
+                    <?php echo $this->Js->link('Atores', '/atores', array('class' => 'nav-link')) ?>
 
                 </li>
                 <li class="nav-item">
@@ -71,7 +71,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <?php echo $this->Html->link('Criticas', '/criticas', array('class' => 'nav-link')) ?>
+                    <?php echo $this->Js->link('Criticas', '/criticas', array('class' => 'nav-link')) ?>
 
             </ul>
         </div>

@@ -28,7 +28,7 @@ echo $this->Form->input('genero_id', array(
 
 // Botão de envio
 echo $this->Form->submit('Gravar',array('class'=>'btn btn-secondary ml-3','update'=>'#content'));
-
+$this->Js->Buffer('$(".form-error").addClass("is-invaid");');
 // Fechar o formulário
 echo $this->Form->end();1
 ?>
